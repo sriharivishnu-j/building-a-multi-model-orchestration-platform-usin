@@ -1,12 +1,9 @@
 import React from 'react';
-import { Provider } from 'react-redux';
-import { store } from './store';
-import { MainPage } from './components/MainPage';
-
-const App: React.FC = () => (
-  <Provider store={store}>
-    <MainPage />
-  </Provider>
-);
-
+function App() {
+  return (
+    <div className="App">
+      <h1>Welcome to Multi-Model Orchestration Platform</h1>
+    </div>
+  );
+}
 export default App;
