@@ -1,20 +1,15 @@
 package main
 
 import (
-	"log"
+	"fmt"
 	"net/http"
 )
 
-func main() {
-	http.HandleFunc("/ingest", func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != http.MethodPost {
-			http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
-			return
-		}
-		log.Println("Data ingested successfully")
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("Data ingested successfully"))
-	})
+func dataAggregation(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Data aggregation processed")
+}
 
-	log.Fatal(http.ListenAndServe(":8080", nil))
+func main() {
+	http.HandleFunc("/aggregate", dataAggregation)
+	http.ListenAndServe(":8080", nil)
 }
