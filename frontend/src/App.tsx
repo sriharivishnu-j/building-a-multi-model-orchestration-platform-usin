@@ -1,15 +1,15 @@
 import React from 'react';
-import { Provider } from 'react-redux';
-import { store } from './store';
-import './App.css';
+import { QueryClient, QueryClientProvider } from 'react-query';
+
+const queryClient = new QueryClient();
 
 function App() {
   return (
-    <Provider store={store}>
+    <QueryClientProvider client={queryClient}>
       <div className="App">
         <h1>Multi-Model Orchestration Platform</h1>
       </div>
-    </Provider>
+    </QueryClientProvider>
   );
 }
 
