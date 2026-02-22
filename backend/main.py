@@ -1,15 +1,19 @@
 from fastapi import FastAPI, HTTPException
+from langchain import LangChain
 import logging
 
 app = FastAPI()
+lang_chain = LangChain()
 
-logger = logging.getLogger("uvicorn")
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
-@app.get("/api/models/{model_id}")
-async def get_model(model_id: str):
+@app.get("/orchestrate")
+async def orchestrate_models(data: dict):
     try:
-        # Placeholder for model retrieval logic
-        return {"model_id": model_id, "status": "success"}
+        result = lang_chain.invoke_chain(data)
+        logger.info("Orchestration successful", extra={"result": result})
+        return result
     except Exception as e:
-        logger.error(f"Error retrieving model {model_id}: {e}")
-        raise HTTPException(status_code=500, detail="Internal Server Error")
+        logger.error("Orchestration failed", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
