@@ -1,34 +1,35 @@
 provider "aws" {
-  region = "us-west-2"
+  region = var.region
 }
 
-resource "aws_ecs_cluster" "my_cluster" {
-  name = "my-cluster"
+resource "aws_ecs_cluster" "main" {
+  name = "orchestration-cluster"
 }
 
-resource "aws_ecs_service" "my_service" {
-  name            = "my-service"
-  cluster         = aws_ecs_cluster.my_cluster.id
+resource "aws_ecs_service" "main" {
+  name            = "orchestration-service"
+  cluster         = aws_ecs_cluster.main.id
+  task_definition = aws_ecs_task_definition.main.arn
   desired_count   = 1
   launch_type     = "FARGATE"
-  task_definition = aws_ecs_task_definition.my_task.arn
 }
 
-resource "aws_ecs_task_definition" "my_task" {
-  family                   = "my-task"
+resource "aws_ecs_task_definition" "main" {
+  family                   = "orchestration-task"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  cpu                      = "256"
-  memory                   = "512"
+  execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
   container_definitions    = jsonencode([
     {
-      name      = "my-container"
-      image     = "my-image"
-      essential = true
-      portMappings = [
+      "name": "main-container",
+      "image": "<your-container-image-url>",
+      "cpu": 256,
+      "memory": 512,
+      "essential": true,
+      "portMappings": [
         {
-          containerPort = 80
-          hostPort      = 80
+          "containerPort": 80,
+          "hostPort": 80
         }
       ]
     }
