@@ -1,11 +1,16 @@
 import React from 'react';
+import { Provider } from 'react-redux';
+import { store } from './store';
+import './App.css';
 
-const App: React.FC = () => {
+function App() {
   return (
-    <div>
-      <h1>Multi-Model Orchestration Platform</h1>
-    </div>
+    <Provider store={store}>
+      <div className="App">
+        <h1>Multi-Model Orchestration Platform</h1>
+      </div>
+    </Provider>
   );
-};
+}
 
 export default App;
